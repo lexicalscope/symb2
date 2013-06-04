@@ -7,11 +7,11 @@ namespace Symb2
 {
     public class Trace : IEnumerable<TraceElement>
     {
-        public static Trace trace1;
-        public static Trace trace2;
+        public static Trace Trace1;
+        public static Trace Trace2;
+        public static Trace CurTrace;
 
         private IList<TraceElement> TraceList;
-        private IList<TraceElement> iList;
 
         public Trace()
             : this(new List<TraceElement>())
@@ -22,9 +22,11 @@ namespace Symb2
             TraceList = es;
         }
 
-        public void TraceCall(Object that, string meth, params object[] args)
+        public TraceElement TraceVCall(Object that, string meth, params object[] args)
         {
-            TraceList.Add(new TraceElement(that, meth, args));
+            var e = new TraceElement(that, null, meth, args);
+            TraceList.Add(e);
+            return e;
         }
 
         public Trace TransformTrace(
@@ -79,8 +81,23 @@ namespace Symb2
 
         internal static void Begin()
         {
-            Trace.trace1 = new Trace();
-            Trace.trace2 = new Trace();
+            Trace.Trace1 = new Trace();
+            Trace.Trace2 = new Trace();
+        }
+
+        internal static void Begin1()
+        {
+            Trace.CurTrace = Trace.Trace1;
+        }
+
+        internal static void Begin2()
+        {
+            Trace.CurTrace = Trace.Trace2;
+        }
+
+        public static TraceElement TraceCall(Object that, string meth, params object[] args)
+        {
+            return Trace.CurTrace.TraceVCall(that, meth, args);
         }
     }
 }

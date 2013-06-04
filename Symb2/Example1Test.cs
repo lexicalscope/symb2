@@ -17,7 +17,7 @@ namespace Symb2
         {
             public void Receive(string message)
             {
-                Trace.trace1.TraceCall(this, "Receive", message);
+                Trace.TraceCall(this, "Receive", message);
             }
         }
 
@@ -34,7 +34,7 @@ namespace Symb2
 
             public void Send(string message, int priority)
             {
-                Trace.trace1.TraceCall(this, "Send", message, priority);
+                Trace.Trace1.TraceVCall(this, "Send", message, priority);
                 if (priority < minimumPriority)
                 {
                     return;
@@ -43,7 +43,7 @@ namespace Symb2
             }
         }
 
-        class M
+        class M1
         {
             public void Main(String message, int priority)
             {
@@ -59,7 +59,7 @@ namespace Symb2
         {
             public void Receive(string message)
             {
-                Trace.trace2.TraceCall(this, "Receive", message);
+                Trace.Trace2.TraceVCall(this, "Receive", message);
             }
         }
 
@@ -76,7 +76,7 @@ namespace Symb2
 
             public void Send(string message, int priority)
             {
-                Trace.trace2.TraceCall(this, "Send", message, priority);
+                Trace.Trace2.TraceVCall(this, "Send", message, priority);
                 if (priority < minimumPriority)
                 {
                     return;
@@ -85,7 +85,7 @@ namespace Symb2
             }
         }
 
-        class M
+        class M1
         {
             public void Main(String message, int priority)
             {
@@ -96,15 +96,18 @@ namespace Symb2
     }    
 
     [TestClass]
-    public partial class UnitTest1
+    public partial class Example1Test
     {
         [PexMethod]
         public void TM(string message, int priority)
         {
             Trace.Begin();
 
-            new V1.M().Main(message, priority);
-            new V2.M().Main(message, priority);
+            Trace.Begin1();
+            new V1.M1().Main(message, priority);
+
+            Trace.Begin2();
+            new V2.M1().Main(message, priority);
 
             C();
         }
@@ -112,11 +115,11 @@ namespace Symb2
         [Pure]
         private void C() 
         {
-            var transTrace1 = Trace.trace1.TransformTrace(
+            var transTrace1 = Trace.Trace1.TransformTrace(
                 es => es, 
                 e => true);
-            var transTrace2 = Trace.trace2.TransformTrace(
-                es => new[] { es.First(), new TraceElement(new Object(), "Receive", es.First()[0]) },
+            var transTrace2 = Trace.Trace2.TransformTrace(
+                es => new[] { es.First(), new TraceElement(new Object(), null, "Receive", es.First()[0]) },
                  e => e.Meth == "Send" && ((int)e[1]) >= 5 && ((int)e[1]) < 7);
 
             Assert.AreEqual(transTrace1, transTrace2);    

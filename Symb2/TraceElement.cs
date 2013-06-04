@@ -7,13 +7,19 @@ namespace Symb2
 {
     public class TraceElement
     {
-        private object that;
+        private object That;
+        public object Result { get; set; }
         public string Meth { get; private set; }
         public object[] Args { get; private set; }
 
-        public TraceElement(object that, string meth, params object[] args)
+        public TraceElement(
+            object that, 
+            object result, 
+            string meth, 
+            params object[] args)
         {
-            this.that = that;
+            this.That = that;
+            this.Result = result;
             this.Meth = meth;
             this.Args = args;
         }
