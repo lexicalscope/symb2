@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using KellermanSoftware.CompareNetObjects;
 
 namespace Symb2
 {
@@ -43,6 +44,7 @@ namespace Symb2
             }
             return this.Meth.Equals(other.Meth) &&
                 Enumerable.SequenceEqual(this.Args, other.Args);
+                //new CompareObjects().Compare(this.Args, other.Args);
         }
 
         public override int GetHashCode()

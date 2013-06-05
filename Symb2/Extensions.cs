@@ -14,8 +14,6 @@ namespace Symb2
             Transform<T> transform,
             params Predicate<T>[] predicates)
         {
-            Console.WriteLine("input:" + string.Join(",", sequence));
-
             var result = new List<T>();
             IEnumerable<T> current = sequence;
             while (current.Count() >= predicates.Length)
@@ -24,7 +22,6 @@ namespace Symb2
                     TakeWhile((elem, index) =>
                         index < predicates.Length &&
                         predicates[index](elem));
-                Console.WriteLine("loop:" + string.Join(",", window));
                 if (window.Count() == predicates.Length)
                 {
                     result.AddRange(transform(window));

@@ -122,7 +122,7 @@ namespace Symb2
                 es => new[] { es.First(), new TraceElement(new Object(), null, "Receive", es.First()[0]) },
                  e => e.Meth == "Send" && ((int)e[1]) >= 5 && ((int)e[1]) < 7);
 
-            Assert.AreEqual(transTrace1, transTrace2);    
+            Assert.AreEqual(transTrace1, transTrace2);
         }
     }
 }
