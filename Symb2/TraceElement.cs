@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GeorgeCloney;
 using KellermanSoftware.CompareNetObjects;
 
 namespace Symb2
@@ -9,7 +10,7 @@ namespace Symb2
     public class TraceElement
     {
         private object That;
-        public object Result { get; set; }
+        public object Result { get; set; }// {return Result;} set { Result = value == null ? null : value.DeepClone(); } }
         public string Meth { get; private set; }
         public object[] Args { get; private set; }
 

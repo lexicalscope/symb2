@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GeorgeCloney;
 
 namespace Symb2
 {
@@ -24,7 +25,7 @@ namespace Symb2
 
         public TraceElement TraceVCall(Object that, string meth, params object[] args)
         {
-            var e = new TraceElement(that, null, meth, args);
+            var e = new TraceElement(that, null, meth, args);//.DeepClone();
             TraceList.Add(e);
             return e;
         }

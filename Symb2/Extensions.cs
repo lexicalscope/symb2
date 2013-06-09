@@ -14,7 +14,7 @@ namespace Symb2
             Transform<T> transform,
             params Predicate<T>[] predicates)
         {
-            var result = new List<T>();
+            var result = new List<T>(); 
             IEnumerable<T> current = sequence;
             while (current.Count() >= predicates.Length)
             {
@@ -33,6 +33,7 @@ namespace Symb2
                     current = current.Skip(1);
                 }
             }
+            result.AddRange(current);
             return result;
         }
     }

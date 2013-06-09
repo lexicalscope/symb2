@@ -68,6 +68,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GeorgeCloney">
+      <HintPath>..\packages\GeorgeCloney.1.0.0.10\lib\net40\GeorgeCloney.dll</HintPath>
+    </Reference>
     <Reference Include="KellermanSoftware.Compare-NET-Objects">
       <HintPath>..\packages\CompareNETObjects.1.7.1.0\lib\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
     </Reference>
@@ -90,6 +93,10 @@
     <Compile Include="Example2Test.cs" />
     <Compile Include="Example2Test.TM.g.cs">
       <DependentUpon>Example2Test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Example3Test.cs" />
+    <Compile Include="Example3Test.TM.g.cs">
+      <DependentUpon>Example3Test.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\PexAssemblyInfo.cs" />
