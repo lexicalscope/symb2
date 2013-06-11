@@ -16,7 +16,7 @@ namespace Symb2
         {
             var result = new List<T>(); 
             IEnumerable<T> current = sequence;
-            while (current.Count() >= predicates.Length)
+            while (predicates.Length > 0 && current.Count() >= predicates.Length)
             {
                 var window = current.
                     TakeWhile((elem, index) =>

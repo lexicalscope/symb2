@@ -253,8 +253,7 @@ namespace Symb2
                 e => e.Meth == "Answered" && !((bool)e.Result));
 
             var transTrace2 = Trace.Trace2.TransformTrace(
-                es => es,
-                e => true);
+                es => es);
 
             Assert.AreEqual(transTrace1, transTrace2);
         }

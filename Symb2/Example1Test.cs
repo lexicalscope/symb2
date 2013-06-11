@@ -45,10 +45,13 @@ namespace Symb2
 
         class M1
         {
-            public void Main(String message, int priority)
+            public void Main(
+                string message1, int priority1,
+                string message2, int priority2)
             {
                 MessageBus bus = new MessageBus(new MessageReceiver(), 5);
-                bus.Send(message, priority);
+                bus.Send(message1, priority1);
+                bus.Send(message2, priority2);
             }
         }
     }
@@ -87,10 +90,14 @@ namespace Symb2
 
         class M1
         {
-            public void Main(String message, int priority)
+            public void Main(
+                string message1, int priority1,
+                string message2, int priority2)
             {
                 MessageBus bus = new MessageBus(new MessageReceiver(), 7);
-                bus.Send(message, priority);
+                bus.Send(message1, priority1);
+                bus.Send(message2, priority2);
+
             }
         }
     }    
@@ -99,15 +106,21 @@ namespace Symb2
     public partial class Example1Test
     {
         [PexMethod]
-        public void TM(string message, int priority)
+        public void TM(
+            string message1, int priority1,
+            string message2, int priority2)
         {
             Trace.Begin();
 
             Trace.Begin1();
-            new V1.M1().Main(message, priority);
+            new V1.M1().Main(
+                message1, priority1,
+                message2, priority2);
 
             Trace.Begin2();
-            new V2.M1().Main(message, priority);
+            new V2.M1().Main(
+                message1, priority1,
+                message2, priority2);
 
             C();
         }
