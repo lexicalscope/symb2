@@ -100,5 +100,14 @@ namespace Symb2
         {
             return Trace.CurTrace.TraceVCall(that, meth, args);
         }
+
+        public static Tuple<Trace, Trace> TransformTrace(
+                 PairTransform<TraceElement> transform,
+                 Predicate<TraceElement>[] predicates1,
+                 Predicate<TraceElement>[] predicates2)
+        {
+            var transformed = Extensions.ReplaceSubsequences(Trace1, Trace2, transform, predicates1, predicates2);
+            return new Tuple<Trace, Trace>(new Trace(transformed.Item1), new Trace(transformed.Item2));
+        }
     }
 }

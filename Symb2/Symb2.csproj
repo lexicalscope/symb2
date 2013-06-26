@@ -98,6 +98,10 @@
     <Compile Include="Example3Test.TM.g.cs">
       <DependentUpon>Example3Test.cs</DependentUpon>
     </Compile>
+    <Compile Include="Example4Test.cs" />
+    <Compile Include="Example4Test.TM.g.cs">
+      <DependentUpon>Example4Test.cs</DependentUpon>
+    </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\PexAssemblyInfo.cs" />
     <Compile Include="Trace.cs" />

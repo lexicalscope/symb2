@@ -241,21 +241,28 @@ namespace Symb2
         [Pure]
         private void C()
         {
-            var transTrace1 = Trace.Trace1.TransformTrace(
-                es => new TraceElement[] {
-                    es.ElementAt(0), 
-                    es.ElementAt(1),
-                    es.ElementAt(2),
-                    new TraceElement(null, null, "PlayFile", es.ElementAt(0).Result, "noans.wav"),
-                    new TraceElement(null, null, "HangUp", es.ElementAt(0).Result)},
-                e => e.Meth == "Call",
-                e => e.Meth == "Call",
-                e => e.Meth == "Answered" && !((bool)e.Result));
+            var transTrace = Trace.TransformTrace(
+                (es1, es2) => new Tuple<IEnumerable<TraceElement>, IEnumerable<TraceElement>>(
+                    new TraceElement[] {
+                        es1.ElementAt(0), 
+                        es1.ElementAt(1),
+                        es1.ElementAt(2),
+                        es2.ElementAt(3),
+                        es2.ElementAt(4)},
+                     es2),
+                new Predicate<TraceElement>[] {
+                    e => e.Meth == "Call",
+                    e => e.Meth == "Call",
+                    e => e.Meth == "Answered" && !((bool)e.Result)},
+                new Predicate<TraceElement>[]{
+                    e => e.Meth == "Call",
+                    e => e.Meth == "Call",
+                    e => e.Meth == "Answered" && !((bool)e.Result),
+                    e => e.Meth == "PlayFile",
+                    e => e.Meth == "HangUp"
+                });
 
-            var transTrace2 = Trace.Trace2.TransformTrace(
-                es => es);
-
-            Assert.AreEqual(transTrace1, transTrace2);
+            Assert.AreEqual(transTrace.Item1, transTrace.Item2);
         }
     }
 }
