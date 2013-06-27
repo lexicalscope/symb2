@@ -131,7 +131,7 @@ namespace Symb2
         {
             private Infrastructure Infra = new Infrastructure();
             private Billing Bill = new Billing();
-            public NoAnsHdl NoAns {get; set;}
+            public NoAnsHdl NoAns { get; set; }
 
             public void ConnectCall(String fromNumber, String toNumber)
             {
@@ -241,28 +241,41 @@ namespace Symb2
         [Pure]
         private void C()
         {
-            var transTrace = Trace.TransformTrace(
-                (es1, es2) => new Tuple<IEnumerable<TraceElement>, IEnumerable<TraceElement>>(
-                    new TraceElement[] {
+            var transTraces = Trace.TransformTrace(
+                (es1, es2) => Tuple.Create(
+                    Trace.FromElements(
                         es1.ElementAt(0), 
                         es1.ElementAt(1),
                         es1.ElementAt(2),
                         es2.ElementAt(3),
-                        es2.ElementAt(4)},
+                        es2.ElementAt(4)),
                      es2),
-                new Predicate<TraceElement>[] {
-                    e => e.Meth == "Call",
-                    e => e.Meth == "Call",
-                    e => e.Meth == "Answered" && !((bool)e.Result)},
-                new Predicate<TraceElement>[]{
-                    e => e.Meth == "Call",
-                    e => e.Meth == "Call",
-                    e => e.Meth == "Answered" && !((bool)e.Result),
-                    e => e.Meth == "PlayFile",
-                    e => e.Meth == "HangUp"
-                });
+                Trace.Predicate(
+                    "Call".IsMeth(),
+                    "Call".IsMeth(),
+                    "Answered".IsMeth().And(
+                       false.IsResult())),
+                Trace.Predicate(
+                    "Call".IsMeth(),
+                    "Call".IsMeth(),
+                    "Answered".IsMeth().And(
+                       false.IsResult()),
+                    "PlayFile".IsMeth(),
+                    "HangUp".IsMeth()
+                ));
 
-            Assert.AreEqual(transTrace.Item1, transTrace.Item2);
+            if (!transTraces.AreEqual())
+            {
+                Assert.Fail();
+            }
         }
+    }
+
+    public static class PredicateExtensions
+    {
+        public static Predicate<TraceElement> IsMeth(this String name) { return e => e.Meth == name; }
+        public static Predicate<TraceElement> IsResult(this Object value) { return e => e.Result.Equals(value); }
+        public static Predicate<TraceElement> And(this Predicate<TraceElement> l, Predicate<TraceElement> r) { return e => l(e) && r(e); }
+        public static bool AreEqual<T>(this Tuple<T, T> tuple) { return tuple.Item1.Equals(tuple.Item2);} 
     }
 }

@@ -17,8 +17,8 @@ namespace Symb2
             IEnumerable<T> sequence1,
             IEnumerable<T> sequence2,
             PairTransform<T> transform,
-            Predicate<T>[] predicates1,
-            Predicate<T>[] predicates2)
+            IEnumerable<Predicate<T>> predicates1,
+            IEnumerable<Predicate<T>> predicates2)
         {
             var result1 = new List<T>(); 
             var result2 = new List<T>();
@@ -52,7 +52,7 @@ namespace Symb2
             this IEnumerable<T> sequence,
             Matched<T> onMatch,
             UnMatched<T> onNoMatch,
-            params Predicate<T>[] predicates)
+            IEnumerable<Predicate<T>> predicates)
         {
             IEnumerable<T> pending = sequence;
             List<T> scanned = new List<T>();
@@ -61,12 +61,12 @@ namespace Symb2
             {
                 var window = pending.
                     TakeWhile((elem, index) =>
-                        index < predicates.Length &&
-                        predicates[index](elem));
-                if (window.Count() == predicates.Length)
+                        index < predicates.Count() &&
+                        predicates.ElementAt(index)(elem));
+                if (window.Count() == predicates.Count())
                 {
                     onMatch(scanned, window);
-                    return pending.Skip(predicates.Length);
+                    return pending.Skip(predicates.Count());
                 }
                 else
                 {

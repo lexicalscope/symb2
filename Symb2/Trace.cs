@@ -103,11 +103,16 @@ namespace Symb2
 
         public static Tuple<Trace, Trace> TransformTrace(
                  PairTransform<TraceElement> transform,
-                 Predicate<TraceElement>[] predicates1,
-                 Predicate<TraceElement>[] predicates2)
+                 IEnumerable<Predicate<TraceElement>> predicates1,
+                 IEnumerable<Predicate<TraceElement>> predicates2)
         {
             var transformed = Extensions.ReplaceSubsequences(Trace1, Trace2, transform, predicates1, predicates2);
             return new Tuple<Trace, Trace>(new Trace(transformed.Item1), new Trace(transformed.Item2));
         }
+
+        public static IEnumerable<TraceElement> FromElements(params TraceElement[] args) { return args; }
+        public static IEnumerable<Predicate<TraceElement>> Predicate(params Predicate<TraceElement>[] args) { return args; }
+
+
     }
 }
