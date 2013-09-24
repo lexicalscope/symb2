@@ -10,8 +10,9 @@ using Microsoft.Pex.Framework.Settings;
 
 namespace Symb2
 {
-    public class Student
+    public class Student : InstObj 
     {
+        public int _rb_id { get; set; }
         private string name;
 
         public Student(String name)
@@ -21,6 +22,7 @@ namespace Symb2
 
         internal string Name()
         {
+            
             return name;
         }
 
@@ -52,7 +54,14 @@ namespace Symb2
         {
             internal Student[] OrderedByGrade()
             {
-                return Test51.L0p;
+                Student[] students = new Student[Test51.L0p.Length];
+                for (int i = 0; i < students.Length; i++)
+                {
+                    students[i] = Test51.L0p[i];
+                    ATracer.log("Put", new Object[] { students[i] });
+                }
+                
+                return students;
             }
         }
 
@@ -72,6 +81,10 @@ namespace Symb2
             internal Student[] AwardTo(Student[] students)
             {
                 Contract.Requires(students.Length >= 3);
+
+                ATracer.log("Get", new Object[] { students[0] });
+                ATracer.log("Get", new Object[] { students[1] });
+                ATracer.log("Get", new Object[] { students[2] });
 
                 return new Student[] { students[0], students[1], students[2] };
             }
@@ -98,7 +111,14 @@ namespace Symb2
         {
             internal Student[] OrderedByGrade()
             {
-                return Test51.L0q;
+                Student[] students = new Student[Test51.L0q.Length];
+                for (int i = 0; i < students.Length; i++)
+                {
+                    students[i] = Test51.L0q[i];
+                    ATracer.log("Put", new Object[] { students[i] });
+                }
+
+                return students;
             }
         }
 
@@ -106,7 +126,11 @@ namespace Symb2
         {
             internal static void Considered(Student[] students)
             {
-                Array.Sort(students, (a, b) => a.Name().CompareTo(b.Name()));
+                students.USort((a, b) => a.Name().CompareTo(b.Name()));
+                //Student[] students2 = new Student[students.Length];
+                //students.CopyTo(students2, 0);
+                //Array.Sort(students2, (a, b) => a.Name().CompareTo(b.Name()));
+                //var s2 = from s in students orderby s.Name() select s;
                 foreach (Student s in students)
                 {
                     System.Console.WriteLine("considered " + s.Name());
@@ -119,6 +143,10 @@ namespace Symb2
             internal Student[] AwardTo(Student[] students)
             {
                 Contract.Requires(students.Length >= 3);
+
+                ATracer.log("Get", new Object[] { students[0] });
+                ATracer.log("Get", new Object[] { students[1] });
+                ATracer.log("Get", new Object[] { students[2] });
 
                 return new Student[] { students[0], students[1], students[2] };
             }
@@ -145,7 +173,7 @@ namespace Symb2
         public static Student[] L0p;
         public static Student[] L0q;
 
-        [PexMethod(TestEmissionFilter = PexTestEmissionFilter.All)]
+        [PexMethod(TestEmissionFilter = PexTestEmissionFilter.All, MaxConstraintSolverTime = 4)]
         [PexAllowedContractRequiresFailure]
         public void TM([PexAssumeNotNull] String[] L0)
         {
@@ -160,6 +188,11 @@ namespace Symb2
             new T5V1.M().Main();
             ATracer.begin2();
             new T5V2.M().Main();
+
+            Console.WriteLine(ATracer.trace1);
+            Console.WriteLine(ATracer.trace2);
+
+            PexAssert.AreEqual(ATracer.trace1, ATracer.trace2);
 
             //ATrace.Begin();
             //PexAssert.AreBehaviorsEqual(() => new T5V1.M().Main(),
@@ -200,10 +233,16 @@ namespace Symb2
             //ATrace.End();
         }*/
 
-        [TestMethod]
+        //[TestMethod]
         public void SimpleTest()
         {
             TM(new String[] { "David", "Nigel", "Derek" });
+        }
+
+        //[TestMethod]
+        public void SameOrderTest()
+        {
+            TM(new String[] { "A", "B", "C" });
         }
     }
 

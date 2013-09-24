@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics.Contracts;
 
 namespace Symb2
 {
@@ -12,25 +13,93 @@ namespace Symb2
 
     class ATraceElement 
     {
-        String m;
-        int[] ps;
+        public String m;
+        public int[] ps;
 
         public ATraceElement(string m, int[] ps)
         {
             this.m = m;
             this.ps = ps;
         }
+
+        [Pure]
+        public override String ToString()
+        {
+            return m + "(" + String.Join(",", ps) + ")";
+        }
+
+        [Pure]
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            ATraceElement that = obj as ATraceElement;
+            if ((System.Object)that == null)
+            {
+                return false;
+            }
+
+            return this.m.Equals(that.m) && Enumerable.SequenceEqual(this.ps, that.ps);
+        }
+
+        [Pure]
+        public override int GetHashCode()
+        {
+            int hc = m.GetHashCode();
+            foreach(int p in ps)
+            {
+                hc = (p * 17) + hc;
+            }
+            return hc;
+        }
     }
 
     class ATrace
     {
-        int count = 0;
-        List<ATraceElement> trace = new List<ATraceElement>();
+        int seenCount = 0;
+        public List<ATraceElement> trace = new List<ATraceElement>();
 
         public void log(String m, Object[] ps)
         {
-            Array.ForEach(ps, p => { InstObj po = ((InstObj)p); if (po._rb_id == 0) { po._rb_id = ++count; } });
+            Array.ForEach(ps, p => { InstObj po = ((InstObj)p); if (po._rb_id == 0) { po._rb_id = ++seenCount; } });
             trace.Add(new ATraceElement(m, Array.ConvertAll(ps, p => ((InstObj)p)._rb_id)));
+        }
+
+        [Pure]
+        public override String ToString()
+        {
+            return String.Join(Environment.NewLine, trace);
+        }
+
+        [Pure]
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            ATrace that = obj as ATrace;
+            if ((System.Object)that == null)
+            {
+                return false;
+            }
+
+            return this.seenCount.Equals(that.seenCount) && this.trace.SequenceEqual(that.trace);
+        }
+
+        [Pure]
+        public override int GetHashCode()
+        {
+            int hc = trace.Count;
+            foreach (ATraceElement e in trace)
+            {
+                hc = (e.GetHashCode() * 17) + hc;
+            }
+            return hc;
         }
     }
 
@@ -50,6 +119,11 @@ namespace Symb2
         {
             trace2 = new ATrace();
             trace = trace2;
+        }
+
+        public static void log(String m, Object[] ps)
+        {
+            trace.log(m, ps);
         }
     }
 }
