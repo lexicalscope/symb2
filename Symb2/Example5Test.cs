@@ -22,7 +22,6 @@ namespace Symb2
 
         internal string Name()
         {
-            
             return name;
         }
 
@@ -58,7 +57,7 @@ namespace Symb2
                 for (int i = 0; i < students.Length; i++)
                 {
                     students[i] = Test51.L0p[i];
-                    ATracer.log("Put", new Object[] { students[i] });
+                    ATracer.log("Put", new Object[] {students, students[i]});
                 }
                 
                 return students;
@@ -67,8 +66,9 @@ namespace Symb2
 
         public class Logger
         {
-            internal static void Considered(Student[] students)
+            internal void Considered(Student[] students)
             {
+                ATracer.log("Considered", new Object[] { this, students });
                 foreach (Student s in students)
                 {
                     System.Console.WriteLine("considered " + s.Name());
@@ -82,10 +82,11 @@ namespace Symb2
             {
                 Contract.Requires(students.Length >= 3);
 
-                ATracer.log("Get", new Object[] { students[0] });
-                ATracer.log("Get", new Object[] { students[1] });
-                ATracer.log("Get", new Object[] { students[2] });
+                ATracer.log("Get", new Object[] { students, students[0] });
+                ATracer.log("Get", new Object[] { students, students[1] });
+                ATracer.log("Get", new Object[] { students, students[2] });
 
+                //ATracer.log("Name", new Object[] { this });
                 return new Student[] { students[0], students[1], students[2] };
             }
         }
@@ -99,7 +100,7 @@ namespace Symb2
             public Student[] Main()
             {
                 Student[] students = db.OrderedByGrade();
-                Logger.Considered(students);
+                new Logger().Considered(students);
                 return prizes.AwardTo(students);
             }
         }
@@ -115,7 +116,7 @@ namespace Symb2
                 for (int i = 0; i < students.Length; i++)
                 {
                     students[i] = Test51.L0q[i];
-                    ATracer.log("Put", new Object[] { students[i] });
+                    ATracer.log("Put", new Object[] { students, students[i] });
                 }
 
                 return students;
@@ -124,14 +125,18 @@ namespace Symb2
 
         public class Logger
         {
-            internal static void Considered(Student[] students)
+            internal void Considered(Student[] students)
             {
-                students.USort((a, b) => a.Name().CompareTo(b.Name()));
+                ATracer.log("Considered", new Object[] { this, students });
+
+                //students.USort((a, b) => a.Name().CompareTo(b.Name()));
+                Student[] students2 = students.UCopy().USort((a, b) => a.Name().CompareTo(b.Name()));
+
                 //Student[] students2 = new Student[students.Length];
                 //students.CopyTo(students2, 0);
                 //Array.Sort(students2, (a, b) => a.Name().CompareTo(b.Name()));
                 //var s2 = from s in students orderby s.Name() select s;
-                foreach (Student s in students)
+                foreach (Student s in students2)
                 {
                     System.Console.WriteLine("considered " + s.Name());
                 }
@@ -144,9 +149,9 @@ namespace Symb2
             {
                 Contract.Requires(students.Length >= 3);
 
-                ATracer.log("Get", new Object[] { students[0] });
-                ATracer.log("Get", new Object[] { students[1] });
-                ATracer.log("Get", new Object[] { students[2] });
+                ATracer.log("Get", new Object[] { students, students[0] });
+                ATracer.log("Get", new Object[] { students, students[1] });
+                ATracer.log("Get", new Object[] { students, students[2] });
 
                 return new Student[] { students[0], students[1], students[2] };
             }
@@ -161,7 +166,7 @@ namespace Symb2
             public Student[] Main()
             {
                 Student[] students = db.OrderedByGrade();
-                Logger.Considered(students);
+                new Logger().Considered(students);
                 return prizes.AwardTo(students);
             }
         }
@@ -173,7 +178,7 @@ namespace Symb2
         public static Student[] L0p;
         public static Student[] L0q;
 
-        [PexMethod(TestEmissionFilter = PexTestEmissionFilter.All, MaxConstraintSolverTime = 4)]
+        [PexMethod(TestEmissionFilter = PexTestEmissionFilter.All, MaxConstraintSolverTime = 8)]
         [PexAllowedContractRequiresFailure]
         public void TM([PexAssumeNotNull] String[] L0)
         {
@@ -190,6 +195,7 @@ namespace Symb2
             new T5V2.M().Main();
 
             Console.WriteLine(ATracer.trace1);
+            Console.WriteLine("--------------");
             Console.WriteLine(ATracer.trace2);
 
             PexAssert.AreEqual(ATracer.trace1, ATracer.trace2);
@@ -233,7 +239,7 @@ namespace Symb2
             //ATrace.End();
         }*/
 
-        //[TestMethod]
+        [TestMethod]
         public void SimpleTest()
         {
             TM(new String[] { "David", "Nigel", "Derek" });

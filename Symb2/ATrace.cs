@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 
 namespace Symb2
 {
@@ -57,15 +58,31 @@ namespace Symb2
         }
     }
 
+    class RbId
+    {
+        public int id;
+
+        public RbId(int id)
+        {
+            this.id = id;
+        }
+    }
+
     class ATrace
     {
+        ConditionalWeakTable<Object, RbId> rb_id = new ConditionalWeakTable<Object, RbId>();
         int seenCount = 0;
         public List<ATraceElement> trace = new List<ATraceElement>();
 
         public void log(String m, Object[] ps)
         {
-            Array.ForEach(ps, p => { InstObj po = ((InstObj)p); if (po._rb_id == 0) { po._rb_id = ++seenCount; } });
-            trace.Add(new ATraceElement(m, Array.ConvertAll(ps, p => ((InstObj)p)._rb_id)));
+            //Array.ForEach(ps, p => { InstObj po = ((InstObj)p); if (po._rb_id == 0) { po._rb_id = ++seenCount; } });
+            int[] ids = new int[ps.Length];
+            for (int i = 0; i < ps.Length; i++)
+            {
+                ids[i] = rb_id.GetValue(ps[i], (k) => new RbId(++seenCount)).id;
+            }
+            trace.Add(new ATraceElement(m, ids));
         }
 
         [Pure]

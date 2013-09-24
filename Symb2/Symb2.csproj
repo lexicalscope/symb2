@@ -87,6 +87,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ATrace.cs" />
     <Compile Include="Example1Test.TM.g.cs">
       <DependentUpon>Example1Test.cs</DependentUpon>
     </Compile>
@@ -102,8 +103,17 @@
     <Compile Include="Example4Test.TM.g.cs">
       <DependentUpon>Example4Test.cs</DependentUpon>
     </Compile>
+    <Compile Include="Example5Test.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Factories\StudentFactory.cs" />
     <Compile Include="Properties\PexAssemblyInfo.cs" />
+    <Compile Include="SortingPexTest.cs" />
+    <Compile Include="SortingPexTestX.TM.g.cs">
+      <DependentUpon>SortingPexTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Test51.TM.g.cs">
+      <DependentUpon>Example5Test.cs</DependentUpon>
+    </Compile>
     <Compile Include="Trace.cs" />
     <Compile Include="Dynamic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -113,6 +123,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

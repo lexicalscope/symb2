@@ -20,7 +20,8 @@ namespace Symb2
             PexAssume.AreDistinctValues(L0);
             PexAssume.IsTrue(L0.Length > 1);
 
-            String[] L1 = L0.UCopy().USort((a, b) => a.CompareTo(b)); //OrderBy(x => x).ToArray();
+            //String[] L1 = L0.UCopy().USort((a, b) => a.CompareTo(b));
+            String[] L1 = L0.OrderBy(x => x).ToArray();
             //new String[L0.Length];
             //L0.UCopyTo(L1);
             //Array.Sort(L1);
@@ -32,26 +33,25 @@ namespace Symb2
             PexAssert.IsTrue(L0.SequenceEqual(L1));
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void t0()
         {
             TM(new String[] { "a", "b", "c" });
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void t1()
         {
             TM(new String[] { "c", "b", "a" });
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void foo()
         {
-            Console.WriteLine(new String[] { "c", "b", "a" }.USort((a,b) => a.CompareTo(b)));
+            Console.WriteLine(String.Join(",", new String[] { "c", "b", "a" }.USort((a,b) => a.CompareTo(b))));
         }
 
-
-        [TestMethod]
+        //[TestMethod]
         public void t2()
         {
             TM(new String[] { "\0\0", "\0\0\0", "" });

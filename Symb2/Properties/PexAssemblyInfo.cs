@@ -8,4 +8,8 @@
 using System;
 
 using Microsoft.Pex.Framework.Instrumentation;
+using Symb2;
+using System.Runtime.CompilerServices;
+
 [assembly: PexInstrumentAssembly("KellermanSoftware.Compare-NET-Objects")]
+[assembly: PexInstrumentType(typeof(ConditionalWeakTable<object, RbId>))]

@@ -50,7 +50,7 @@ namespace Symb2
             {
                 int pivot = array.Partition(left, right, left + (right - left) / 2, comparison);
                 array.USort(left, pivot - 1, comparison);
-                array.USort(pivot, right, comparison);
+                array.USort(pivot + 1, right, comparison);
             }
             return array;
         }
